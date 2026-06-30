@@ -1,11 +1,7 @@
 // app/about/page.tsx
+import { getAllSettings } from "@/lib/site-settings";
 import { ShieldCheck, Cpu, Users, Award } from "lucide-react";
-
-export const metadata = {
-  title: "About Us | Alphatech Computer Engineering & Technologies",
-  description:
-    "Learn about Alphatech — our story, mission, values and the expert team behind Osun and Ondo's most trusted computer engineering company.",
-};
+import Link from "next/link";
 
 const VALUES = [
   { icon: ShieldCheck, title: "Integrity", desc: "We give honest diagnoses and fair prices. No hidden charges, no unnecessary repairs." },
@@ -23,7 +19,14 @@ const TIMELINE = [
   { year: "2026", event: "Launched this website to serve customers across Southwest Nigeria." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const s = await getAllSettings();
+
+  const headline = s["about.headline"] || "Southwest Nigeria's trusted computer engineering company";
+  const intro = s["about.intro"] || "Since 2019, Alphatech has been diagnosing, repairing and building computers for individuals, students and businesses across Osun and Ondo states.";
+  const mission = s["about.mission"] || "To provide every customer with fast, honest, high-quality technology services at fair prices.";
+  const vision = s["about.vision"] || "To build the most trusted computer engineering brand in Nigeria.";
+
   return (
     <main>
       {/* Hero */}
@@ -31,13 +34,9 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-5 lg:px-8 text-center">
           <p className="font-mono text-xs text-sky-400 tracking-widest">ABOUT US</p>
           <h1 className="font-display font-bold text-3xl lg:text-5xl text-white mt-3 leading-tight">
-            Southwest Nigeria's trusted<br />computer engineering company
+            {headline}
           </h1>
-          <p className="font-body text-slate-400 text-lg mt-5 max-w-2xl mx-auto">
-            Since 2019, Alphatech has been diagnosing, repairing and building computers for
-            individuals, students and businesses across Osun and Ondo states — with certified
-            engineers, genuine parts and a commitment to doing it right.
-          </p>
+          <p className="font-body text-slate-400 text-lg mt-5 max-w-2xl mx-auto">{intro}</p>
         </div>
       </section>
 
@@ -47,20 +46,12 @@ export default function AboutPage() {
           <div className="bg-blue-700 rounded-2xl p-8 text-white">
             <p className="font-mono text-xs tracking-widest opacity-70 mb-3">OUR MISSION</p>
             <h2 className="font-display font-bold text-2xl mb-4">Reliable solutions. Technology that works.</h2>
-            <p className="font-body text-blue-100 leading-relaxed">
-              To provide every customer — from a student with a broken laptop to a business
-              with a full office network — with fast, honest, high-quality technology services
-              at fair prices. We believe technology should work for everyone.
-            </p>
+            <p className="font-body text-blue-100 leading-relaxed">{mission}</p>
           </div>
           <div className="bg-slate-950 rounded-2xl p-8 text-white">
             <p className="font-mono text-xs tracking-widest text-slate-400 mb-3">OUR VISION</p>
             <h2 className="font-display font-bold text-2xl mb-4">The go-to tech partner for Southwest Nigeria.</h2>
-            <p className="font-body text-slate-300 leading-relaxed">
-              To build the most trusted computer engineering brand in Nigeria — known for
-              technical excellence, transparent service and a team that customers can call
-              any time something goes wrong with their technology.
-            </p>
+            <p className="font-body text-slate-300 leading-relaxed">{vision}</p>
           </div>
         </div>
       </section>
@@ -110,14 +101,14 @@ export default function AboutPage() {
       <section className="bg-slate-950 py-16">
         <div className="max-w-3xl mx-auto px-5 text-center">
           <h2 className="font-display font-bold text-2xl lg:text-3xl text-white">Ready to work with us?</h2>
-          <p className="font-body text-slate-400 mt-3">Book a repair, shop our store, or get in touch — we're always happy to help.</p>
+          <p className="font-body text-slate-400 mt-3">Book a repair, shop our store, or get in touch.</p>
           <div className="flex flex-wrap gap-4 justify-center mt-6">
-            <a href="/book-repair" className="bg-orange-500 hover:bg-orange-600 text-white font-body font-semibold px-6 py-3 rounded-xl transition-colors">
+            <Link href="/book-repair" className="bg-orange-500 hover:bg-orange-600 text-white font-body font-semibold px-6 py-3 rounded-xl transition-colors">
               Book a repair
-            </a>
-            <a href="/contact" className="border border-slate-700 hover:border-slate-500 text-white font-body font-semibold px-6 py-3 rounded-xl transition-colors">
+            </Link>
+            <Link href="/contact" className="border border-slate-700 hover:border-slate-500 text-white font-body font-semibold px-6 py-3 rounded-xl transition-colors">
               Contact us
-            </a>
+            </Link>
           </div>
         </div>
       </section>

@@ -5,56 +5,39 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AuthProvider from "@/components/providers/AuthProvider";
-import { SITE } from "@/lib/constants";
+import { getAllSettings } from "@/lib/site-settings";
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-space-grotesk",
+  subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-space-grotesk",
 });
-
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
+  subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-inter",
 });
-
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["500"],
-  variable: "--font-jetbrains-mono",
+  subsets: ["latin"], weight: ["500"], variable: "--font-jetbrains-mono",
 });
 
-export const metadata: Metadata = {
-  title: `${SITE.shortName} | Computer Repairs, Sales & IT Solutions in Nigeria`,
-  description:
-    "Alphatech Computer Engineering & Technologies offers professional computer repair, sales of new and refurbished computers, accessories, and business IT solutions in Osogbo and Akure, Nigeria.",
-  keywords: [
-    "computer repair Nigeria",
-    "laptop repair Osogbo",
-    "computer repair Akure",
-    "buy laptops Nigeria",
-    "IT solutions Nigeria",
-    "Alphatech",
-  ],
-  openGraph: {
-    title: `${SITE.shortName} | Computer Repairs, Sales & IT Solutions`,
-    description: SITE.tagline,
-    url: SITE.url,
-    siteName: SITE.shortName,
-    locale: "en_NG",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getAllSettings();
+  return {
+    title: `${s["site.name"]} | Computer Repairs, Sales & IT Solutions in Nigeria`,
+    description: `${s["site.name"]} offers professional computer repair, sales and IT solutions in ${s["contact.location1"]} and ${s["contact.location2"]}.`,
+  };
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getAllSettings();
+
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-body">
         <AuthProvider>
-          <Navbar />
+          <Navbar
+            logoUrl={settings["site.logo_url"] || undefined}
+            siteName={settings["site.name"]?.split(" ")[0] ?? "ALPHATECH"}
+          />
           {children}
-          <Footer />
+          <Footer settings={settings} />
         </AuthProvider>
       </body>
     </html>

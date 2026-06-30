@@ -3,13 +3,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Menu, X, Search, User } from "lucide-react";
 import AlphaMark from "./AlphaMark";
 import CartIcon from "./CartIcon";
 import { NAV_LINKS } from "@/lib/constants";
 
-export default function Navbar() {
+type Props = { logoUrl?: string; siteName?: string };
+
+export default function Navbar({ logoUrl, siteName = "ALPHATECH" }: Props) {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
 
@@ -17,13 +20,19 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center gap-2.5">
-          <AlphaMark className="h-11 w-11" />
-          <div className="leading-none">
-            <p className="font-display font-bold text-white text-lg tracking-tight">ALPHATECH</p>
-            <p className="text-[10px] text-slate-400 tracking-widest font-body">
-              COMPUTER ENGINEERING & TECHNOLOGIES
-            </p>
-          </div>
+          {logoUrl ? (
+            <img src={logoUrl} alt={siteName} className="h-11 w-auto object-contain" />
+          ) : (
+            <>
+              <AlphaMark className="h-11 w-11" />
+              <div className="leading-none">
+                <p className="font-display font-bold text-white text-lg tracking-tight">{siteName}</p>
+                <p className="text-[10px] text-slate-400 tracking-widest font-body">
+                  COMPUTER ENGINEERING & TECHNOLOGIES
+                </p>
+              </div>
+            </>
+          )}
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8 font-body text-sm">
@@ -39,17 +48,12 @@ export default function Navbar() {
             <Search className="h-5 w-5" />
           </button>
           <CartIcon />
-          <Link
-            href={session ? "/account" : "/login"}
-            aria-label={session ? "My account" : "Log in"}
-            className="text-slate-300 hover:text-white"
-          >
+          <Link href={session ? "/account" : "/login"} aria-label={session ? "My account" : "Log in"}
+            className="text-slate-300 hover:text-white">
             <User className="h-5 w-5" />
           </Link>
-          <Link
-            href="/book-repair"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-body font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
-          >
+          <Link href="/book-repair"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-body font-semibold text-sm px-4 py-2 rounded-lg transition-colors">
             Book a Repair
           </Link>
         </div>
@@ -66,18 +70,12 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <Link
-            href={session ? "/account" : "/login"}
-            className="text-slate-300"
-            onClick={() => setOpen(false)}
-          >
+          <Link href={session ? "/account" : "/login"} className="text-slate-300" onClick={() => setOpen(false)}>
             {session ? "My Account" : "Log in"}
           </Link>
-          <Link
-            href="/book-repair"
+          <Link href="/book-repair"
             className="bg-orange-500 text-white font-semibold text-center px-4 py-2.5 rounded-lg"
-            onClick={() => setOpen(false)}
-          >
+            onClick={() => setOpen(false)}>
             Book a Repair
           </Link>
         </div>
